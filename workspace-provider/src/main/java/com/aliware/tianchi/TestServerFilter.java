@@ -2,11 +2,10 @@ package com.aliware.tianchi;
 
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.extension.Activate;
-import org.apache.dubbo.rpc.Filter;
-import org.apache.dubbo.rpc.Invocation;
-import org.apache.dubbo.rpc.Invoker;
-import org.apache.dubbo.rpc.Result;
-import org.apache.dubbo.rpc.RpcException;
+import org.apache.dubbo.common.utils.StringUtils;
+import org.apache.dubbo.rpc.*;
+
+import java.util.Map;
 
 /**
  * @author daofeng.xjf
@@ -20,6 +19,9 @@ public class TestServerFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         try{
+//            invocation = new RpcInvocation(invocation.getMethodName(),invocation.getParameterTypes(),invocation.getArguments(),invocation.getAttachments(),invocation.getInvoker());
+            Map<String, String> attachments = invocation.getAttachments();
+            attachments.put("startTime",String.valueOf(System.currentTimeMillis()));
             Result result = invoker.invoke(invocation);
             return result;
         }catch (Exception e){
@@ -30,6 +32,14 @@ public class TestServerFilter implements Filter {
 
     @Override
     public Result onResponse(Result result, Invoker<?> invoker, Invocation invocation) {
+        String startTimeStr = invocation.getAttachment("startTime");
+        Long startTime = System.currentTimeMillis();
+        if (!StringUtils.isBlank(startTimeStr)){
+            startTime = Long.parseLong(startTimeStr);
+        }
+        long cost = System.currentTimeMillis()-startTime;
+
+        RuntimeContants.Client.setAvgCosts(cost>Integer.MAX_VALUE?0:(int)(cost&Integer.MAX_VALUE));
         return result;
     }
 

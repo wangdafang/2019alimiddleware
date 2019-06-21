@@ -1,5 +1,11 @@
 package com.aliware.tianchi;
 
+import org.apache.dubbo.common.extension.ExtensionLoader;
+import org.apache.dubbo.common.threadpool.ThreadPool;
+import org.apache.dubbo.remoting.ChannelHandler;
+import org.apache.dubbo.remoting.Dispatcher;
+import org.apache.dubbo.remoting.transport.dispatcher.WrappedChannelHandler;
+import org.apache.dubbo.remoting.transport.dispatcher.all.AllChannelHandler;
 import org.apache.dubbo.rpc.listener.CallbackListener;
 import org.apache.dubbo.rpc.service.CallbackService;
 
@@ -11,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author daofeng.xjf
+ * @update dafang
  * <p>
  * 服务端回调服务
  * 可选接口
@@ -25,14 +32,14 @@ public class CallbackServiceImpl implements CallbackService {
                 if (!listeners.isEmpty()) {
                     for (Map.Entry<String, CallbackListener> entry : listeners.entrySet()) {
                         try {
-                            entry.getValue().receiveServerMsg(System.getProperty("quota") + " " + new Date().toString());
+                            entry.getValue().receiveServerMsg(System.getProperty("quota") + ":" + RuntimeContants.Client.getAvgCosts());
                         } catch (Throwable t1) {
                             listeners.remove(entry.getKey());
                         }
                     }
                 }
             }
-        }, 0, 5000);
+        }, 0, 300);
     }
 
     private Timer timer = new Timer();

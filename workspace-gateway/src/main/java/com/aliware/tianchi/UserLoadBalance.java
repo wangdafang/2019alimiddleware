@@ -19,8 +19,21 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class UserLoadBalance implements LoadBalance {
 
+
+
     @Override
     public <T> Invoker<T> select(List<Invoker<T>> invokers, URL url, Invocation invocation) throws RpcException {
-        return invokers.get(ThreadLocalRandom.current().nextInt(invokers.size()));
+//        RuntimeContants.Server.getAvgCosts();
+        return invokers.get(getNextIndex());
+    }
+
+
+    public int getNextIndex(){
+        if (TurntableUtils.currentIndex.get()>=TurntableUtils.getTurntableSize()){
+            while(!TurntableUtils.currentIndex.compareAndSet(TurntableUtils.currentIndex.get(),0)){
+            }
+        }
+        int index = TurntableUtils.currentIndex.getAndIncrement();
+        return TurntableUtils.getIndexValue(index);
     }
 }
