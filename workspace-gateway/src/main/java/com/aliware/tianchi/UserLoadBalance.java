@@ -1,5 +1,6 @@
 package com.aliware.tianchi;
 
+import com.sun.tracing.ProviderFactory;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.Invoker;
@@ -23,17 +24,46 @@ public class UserLoadBalance implements LoadBalance {
 
     @Override
     public <T> Invoker<T> select(List<Invoker<T>> invokers, URL url, Invocation invocation) throws RpcException {
-//        RuntimeContants.Server.getAvgCosts();
+
+        //查看系统总可用性，当系统总可用性低于10%时，拒绝所有请求
+//        System.out.println("system usablity:" + RuntimeSysUsablityContants.getSystemUsability());
+//        if ((Contants.MAX_USABILITY * 3 - RuntimeSysUsablityContants.getSystemUsability()) < Contants.MAX_USABILITY*0.2*3){
+//            return null;
+//        }
+//        System.out.println("system usablity:" + RuntimeSysUsablityContants.getSystemUsability());
+//        if ((Contants.MAX_USABILITY * 3 - RuntimeSysUsablityContants.getSystemUsability()) <50){
+//            throw new IllegalAccessError("STSTEM IS NOT VALID");
+//        }
+
         return invokers.get(getNextIndex());
     }
 
 
     public int getNextIndex(){
-        if (TurntableUtils.currentIndex.get()>=TurntableUtils.getTurntableSize()){
-            while(!TurntableUtils.currentIndex.compareAndSet(TurntableUtils.currentIndex.get(),0)){
-            }
-        }
+
+        /**
+         * 随机算法(Contants.TURNTABLE_SIZE_PER_PROVIDER *3 个插槽)
+         */
+//        int index = ThreadLocalRandom.current().nextInt(0,Contants.TURNTABLE_SIZE_PER_PROVIDER *3);
+//
+//        ProviderAgent agent = TurntableUtils.getIndexProviderAgent(index);
+//        while(!agent.isValid()){
+//            index = ThreadLocalRandom.current().nextInt(0,Contants.TURNTABLE_SIZE_PER_PROVIDER *3);
+//            agent = TurntableUtils.getIndexProviderAgent(index);
+//        }
+//        return agent.getGroup();
+
+
+        /**
+         * 一致性哈希算法
+         */
         int index = TurntableUtils.currentIndex.getAndIncrement();
-        return TurntableUtils.getIndexValue(index);
+//        System.out.println("0:"+TurntableUtils.getIndexProviderAgent(0)+"1:"+TurntableUtils.getIndexProviderAgent(1)+"2:"+TurntableUtils.getIndexProviderAgent(2));
+        ProviderAgent returnValue = TurntableUtils.getNextValidPrivoderAgent(index%3);
+        if (returnValue == null){
+            throw new IllegalAccessError("there is no volid agent");
+        }
+        return returnValue.getGroup();
+
     }
 }

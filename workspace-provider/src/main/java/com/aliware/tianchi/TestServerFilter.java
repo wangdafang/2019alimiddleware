@@ -39,7 +39,7 @@ public class TestServerFilter implements Filter {
         }
         long cost = System.currentTimeMillis()-startTime;
 
-        RuntimeContants.Client.setAvgCosts(cost>Integer.MAX_VALUE?0:(int)(cost&Integer.MAX_VALUE));
+        RuntimeAvgContants.Client.setAvgCosts(cost>Integer.MAX_VALUE?0:(int)(cost&Integer.MAX_VALUE));
         return result;
     }
 

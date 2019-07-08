@@ -6,14 +6,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author dafang
  */
-public class RuntimeContants {
+public class RuntimeAvgContants {
 
-    static class Client{
+    public static class Client{
         private static volatile int avgCosts = 0;
 
         public static int getAvgCosts() {
@@ -24,19 +23,25 @@ public class RuntimeContants {
             if(avgCosts>5000){
                 return;
             }
-            RuntimeContants.Client.avgCosts = (RuntimeContants.Client.avgCosts + avgCosts)/2;
+            if (avgCosts > 100){
+                avgCosts = 100;
+            }
+            RuntimeAvgContants.Client.avgCosts = (RuntimeAvgContants.Client.avgCosts + avgCosts)/2;
         }
     }
 
-    static class Server{
+    public static class Server{
 
         private static ConcurrentMap<String, Integer> currentAvgMap = new ConcurrentHashMap();
         private static ConcurrentMap<String, Integer> lastAvgMap = new ConcurrentHashMap();
 
         static{
-            currentAvgMap.putIfAbsent("small",0);
-            currentAvgMap.putIfAbsent("medium",0);
-            currentAvgMap.putIfAbsent("large",0);
+            currentAvgMap.putIfAbsent(Contants.PROVIDER_KEY_SMALL,0);
+            currentAvgMap.putIfAbsent(Contants.PROVIDER_KEY_MEDIUM,0);
+            currentAvgMap.putIfAbsent(Contants.PROVIDER_KEY_LARGE,0);
+            lastAvgMap.putIfAbsent(Contants.PROVIDER_KEY_SMALL,0);
+            lastAvgMap.putIfAbsent(Contants.PROVIDER_KEY_MEDIUM,0);
+            lastAvgMap.putIfAbsent(Contants.PROVIDER_KEY_LARGE,0);
         }
 
         public static int getCurrAvgCosts(String key) {
@@ -48,11 +53,11 @@ public class RuntimeContants {
         }
 
         public static void setAvgCosts(String key,int avgCosts) {
-            if (StringUtils.isBlank(key) || !currentAvgMap.containsKey(currentAvgMap)){
+            if (StringUtils.isBlank(key) || !currentAvgMap.containsKey(key)){
                 return;
             }
-            RuntimeContants.Server.lastAvgMap.put(key,RuntimeContants.Server.currentAvgMap.get(key));
-            RuntimeContants.Server.currentAvgMap.put(key,(RuntimeContants.Server.currentAvgMap.get(key) + avgCosts)/2);
+            RuntimeAvgContants.Server.lastAvgMap.put(key,RuntimeAvgContants.Server.currentAvgMap.get(key));
+            RuntimeAvgContants.Server.currentAvgMap.put(key,(RuntimeAvgContants.Server.currentAvgMap.get(key) + avgCosts)/2);
         }
         public static Set<Map.Entry<String, Integer>> getAvgMapEntry() {
             return currentAvgMap.entrySet();

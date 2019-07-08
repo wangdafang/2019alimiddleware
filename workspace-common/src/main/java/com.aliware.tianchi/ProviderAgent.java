@@ -47,4 +47,12 @@ public class ProviderAgent {
     public void setValid(boolean valid) {
         isValid = valid;
     }
+
+    @Override
+    public String toString() {
+        return "ProviderAgent{" +
+                "name='" + name + '\'' +
+                ", isValid=" + isValid +
+                '}';
+    }
 }

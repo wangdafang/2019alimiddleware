@@ -1,5 +1,8 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.runner.CalFactorTimeRunner;
+import com.aliware.tianchi.runner.CpuUsageCollectTimeRunner;
+import com.aliware.tianchi.runner.ThreadNumsCollectTimeRunner;
 import org.apache.dubbo.common.extension.ExtensionLoader;
 import org.apache.dubbo.common.threadpool.ThreadPool;
 import org.apache.dubbo.remoting.ChannelHandler;
@@ -28,20 +31,37 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CallbackServiceImpl implements CallbackService {
 
     public CallbackServiceImpl() {
+
+        CpuUsageCollectTimeRunner cpuCollectRunner = new CpuUsageCollectTimeRunner();
+        ThreadNumsCollectTimeRunner threadCollectRunner = new ThreadNumsCollectTimeRunner();
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (!listeners.isEmpty()) {
                     for (Map.Entry<String, CallbackListener> entry : listeners.entrySet()) {
                         try {
-                            entry.getValue().receiveServerMsg(System.getProperty("quota") + ":" + RuntimeContants.Client.getAvgCosts());
+                            //数据格式：small:{avgRt}:{cpu}:{thread}
+                            StringBuffer sb = new StringBuffer();
+                            sb.append(System.getProperty("quota"))
+                                    .append(":")
+                                    .append(RuntimeAvgContants.Client.getAvgCosts())
+                                    .append(":")
+                                    .append(RuntimeCpuContants.Client.getCpuUsage())
+                                    .append(":")
+                                    .append(RuntimeThreadContants.Client.getThreadRatio());
+                            System.out.println("send to client:"+sb.toString());
+                            entry.getValue().receiveServerMsg(sb.toString());
                         } catch (Throwable t1) {
-                            listeners.remove(entry.getKey());
+                            //TODO 此处会导致当线程池满之后，不再向服务端推送信息
+//                            listeners.remove(entry.getKey());
+                            t1.printStackTrace();
                         }
                     }
                 }
             }
-        }, 0, 300);
+        }, 0, 10);
+
     }
 
     private Timer timer = new Timer();
