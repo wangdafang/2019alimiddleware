@@ -47,7 +47,7 @@ public class CalFactorTimeRunner implements Runner {
             int usability = calUsability(rt, cpu, thread);
             totalUsability += usability;
             usabilityMap.put(i,usability);
-            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
+//            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
 //            if (usability >80) {
 //                totalUnUsability ++ ;
 //                TurntableUtils.setIndexVolidAttr(i, false);
@@ -57,7 +57,7 @@ public class CalFactorTimeRunner implements Runner {
 //                }
 //            }
         }
-        System.out.println(sb.toString());
+//        System.out.println(sb.toString());
 
         //空出来需要变换的插槽位置
         for(Map.Entry<Integer ,Integer> entry:usabilityMap.entrySet()) {
