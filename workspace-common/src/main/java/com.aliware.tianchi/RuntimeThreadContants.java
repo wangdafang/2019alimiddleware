@@ -54,8 +54,9 @@ public class RuntimeThreadContants {
             if (StringUtils.isBlank(key) || !currentThreadRatioMap.containsKey(key)){
                 return;
             }
-            RuntimeThreadContants.Server.lastThreadRatioMap.put(key, RuntimeThreadContants.Server.currentThreadRatioMap.get(key));
-            RuntimeThreadContants.Server.currentThreadRatioMap.put(key,threadRatio);
+            int lastValue = RuntimeThreadContants.Server.currentThreadRatioMap.get(key);
+            RuntimeThreadContants.Server.lastThreadRatioMap.put(key,RuntimeThreadContants.Server.currentThreadRatioMap.get(key) );
+            RuntimeThreadContants.Server.currentThreadRatioMap.put(key,(threadRatio+lastValue)/2);
         }
         public static Set<Map.Entry<String, Integer>> getThreadNumsMapEntry() {
             return currentThreadRatioMap.entrySet();

@@ -1,6 +1,7 @@
 package com.aliware.tianchi;
 
 import com.aliware.tianchi.runner.CalFactorTimeRunner;
+import com.aliware.tianchi.runner.ShowTurnTableTimeRunner;
 import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.rpc.listener.CallbackListener;
 
@@ -16,6 +17,7 @@ public class CallbackListenerImpl implements CallbackListener {
 
     public CallbackListenerImpl() {
         CalFactorTimeRunner calFactorRunner = new CalFactorTimeRunner();
+//        ShowTurnTableTimeRunner showRunner = new ShowTurnTableTimeRunner();
     }
 
     @Override

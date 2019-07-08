@@ -28,7 +28,7 @@ public class CalFactorTimeRunner implements Runner {
                     e.printStackTrace();
                 }
             }
-        }, 0, 1);
+        }, 0, 5);
     }
 
     /**
@@ -38,7 +38,7 @@ public class CalFactorTimeRunner implements Runner {
         Map<Integer ,Integer > usabilityMap = new HashMap<>();
         int totalUsability = 0;
         int totalUnUsability = 0;
-//        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
         //计算usability
         for(int i=0;i<3;i++) {
             int rt = RuntimeAvgContants.Server.getCurrAvgCosts(TurntableUtils.turntableNames[i]);
@@ -47,7 +47,7 @@ public class CalFactorTimeRunner implements Runner {
             int usability = calUsability(rt, cpu, thread);
             totalUsability += usability;
             usabilityMap.put(i,usability);
-//            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
+            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
 //            if (usability >80) {
 //                totalUnUsability ++ ;
 //                TurntableUtils.setIndexVolidAttr(i, false);
@@ -57,6 +57,7 @@ public class CalFactorTimeRunner implements Runner {
 //                }
 //            }
         }
+        System.out.println(sb.toString());
 
         //空出来需要变换的插槽位置
         for(Map.Entry<Integer ,Integer> entry:usabilityMap.entrySet()) {
@@ -86,7 +87,6 @@ public class CalFactorTimeRunner implements Runner {
             }
 
         }
-//        System.out.println(sb.toString());
 //        RuntimeSysUsablityContants.setSystemUsability(totalUnUsability * 33);
 
     }
@@ -158,7 +158,7 @@ public class CalFactorTimeRunner implements Runner {
      * @return
      */
     private int calTurntableNums(int usability , int totalUsability) {
-        return (usability * Contants.TURNTABLE_SIZE_PER_PROVIDER * 3)  / totalUsability ;
+        return (usability * Contants.TURNTABLE_SIZE_PER_PROVIDER * 3)  / (totalUsability==0?1:totalUsability) ;
     }
 
     /**
@@ -172,7 +172,8 @@ public class CalFactorTimeRunner implements Runner {
      */
     private int calUsability(int rt, int cpu, int thread) {
 //        return Contants.MAX_USABILITY - (rt * 10 + cpu * 20 + thread * 70) /100;
-        return Contants.MAX_USABILITY - (thread * 100) /100;
+//        return Contants.MAX_USABILITY - (thread * 100) /100;
+        return (thread * 100) /100;
     }
 
 }

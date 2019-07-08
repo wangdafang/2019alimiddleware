@@ -53,8 +53,9 @@ public class RuntimeCpuContants {
             if (StringUtils.isBlank(key) || !currentCpuMap.containsKey(key)){
                 return;
             }
+            int lastValue = RuntimeCpuContants.Server.currentCpuMap.get(key);
             RuntimeCpuContants.Server.lastCpuMap.put(key, RuntimeCpuContants.Server.currentCpuMap.get(key));
-            RuntimeCpuContants.Server.currentCpuMap.put(key,cpu);
+            RuntimeCpuContants.Server.currentCpuMap.put(key,(cpu+lastValue) /2);
         }
         public static Set<Map.Entry<String, Integer>> getCpuMapEntry() {
             return currentCpuMap.entrySet();

@@ -43,13 +43,13 @@ public class CallbackServiceImpl implements CallbackService {
                         try {
                             //数据格式：small:{avgRt}:{cpu}:{thread}
                             StringBuffer sb = new StringBuffer();
-//                            sb.append(System.getProperty("quota"))
-//                                    .append(":")
-//                                    .append(RuntimeAvgContants.Client.getAvgCosts())
-//                                    .append(":")
-//                                    .append(RuntimeCpuContants.Client.getCpuUsage())
-//                                    .append(":")
-//                                    .append(RuntimeThreadContants.Client.getThreadRatio());
+                            sb.append(System.getProperty("quota"))
+                                    .append(":")
+                                    .append(RuntimeAvgContants.Client.getAvgCosts())
+                                    .append(":")
+                                    .append(RuntimeCpuContants.Client.getCpuUsage())
+                                    .append(":")
+                                    .append(RuntimeThreadContants.Client.getThreadRatio());
 //                            System.out.println("send to client:"+sb.toString());
                             entry.getValue().receiveServerMsg(sb.toString());
                         } catch (Throwable t1) {
@@ -60,7 +60,7 @@ public class CallbackServiceImpl implements CallbackService {
                     }
                 }
             }
-        }, 0, 1);
+        }, 0, 2);
 
     }
 
