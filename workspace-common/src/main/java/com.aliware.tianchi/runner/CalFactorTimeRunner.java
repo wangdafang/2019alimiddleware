@@ -36,26 +36,58 @@ public class CalFactorTimeRunner implements Runner {
     public void calculateIndexConsisHash(){
 
         Map<Integer ,Integer > usabilityMap = new HashMap<>();
+        int totalUsability = 0;
         int totalUnUsability = 0;
-        StringBuffer sb = new StringBuffer();
+//        StringBuffer sb = new StringBuffer();
         //计算usability
         for(int i=0;i<3;i++) {
             int rt = RuntimeAvgContants.Server.getCurrAvgCosts(TurntableUtils.turntableNames[i]);
             int cpu = RuntimeCpuContants.Server.getCurrCpuUsage(TurntableUtils.turntableNames[i]);
             int thread = RuntimeThreadContants.Server.getCurrThreadRatio(TurntableUtils.turntableNames[i]);
             int usability = calUsability(rt, cpu, thread);
-            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
-            if (usability >80) {
-                totalUnUsability ++ ;
-                TurntableUtils.setIndexVolidAttr(i, false);
-            } else {
-                if (usability < 30){
-                    TurntableUtils.setIndexVolidAttr(i, true);
-                }
+            totalUsability += usability;
+            usabilityMap.put(i,usability);
+//            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
+//            if (usability >80) {
+//                totalUnUsability ++ ;
+//                TurntableUtils.setIndexVolidAttr(i, false);
+//            } else {
+//                if (usability < 30){
+//                    TurntableUtils.setIndexVolidAttr(i, true);
+//                }
+//            }
+        }
+
+        //空出来需要变换的插槽位置
+        for(Map.Entry<Integer ,Integer> entry:usabilityMap.entrySet()) {
+            int turntableNums = calTurntableNums(entry.getValue(), totalUsability);
+
+            int size = TurntableUtils.getIndexesSize(entry.getKey());
+
+            if (size > turntableNums) {
+                TurntableUtils.batchDeleteProviderAgent(size - turntableNums, entry.getKey());
             }
         }
+
+
+        //重新分配空闲的插槽
+        for(Map.Entry<Integer ,Integer> entry:usabilityMap.entrySet()) {
+            int turntableNums = calTurntableNums(entry.getValue(), totalUsability);
+
+            int size = TurntableUtils.getIndexesSize(entry.getKey());
+
+            if (size == turntableNums){
+                continue;
+            }
+            //插拔插槽
+            if (size < turntableNums){
+                TurntableUtils.batchAddProviderAgent(turntableNums - size,entry.getKey());
+
+            }
+
+        }
 //        System.out.println(sb.toString());
-        RuntimeSysUsablityContants.setSystemUsability(totalUnUsability * 33);
+//        RuntimeSysUsablityContants.setSystemUsability(totalUnUsability * 33);
 
     }
 

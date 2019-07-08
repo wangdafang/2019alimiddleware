@@ -20,7 +20,7 @@ public class ThreadNumsCollectTimeRunner implements Runner  {
             public void run() {
                 collectThreadNums();
             }
-        }, 0, 300);
+        }, 0, 1);
     }
 
     public void collectThreadNums(){

@@ -22,7 +22,7 @@ public class CpuUsageCollectTimeRunner implements Runner  {
             public void run() {
                 collectCpuUsage();
             }
-        }, 0, 1000);
+        }, 0, 1);
     }
 
     public void collectCpuUsage(){

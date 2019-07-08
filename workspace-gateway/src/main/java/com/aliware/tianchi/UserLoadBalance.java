@@ -59,7 +59,7 @@ public class UserLoadBalance implements LoadBalance {
          */
         int index = TurntableUtils.currentIndex.getAndIncrement();
 //        System.out.println("0:"+TurntableUtils.getIndexProviderAgent(0)+"1:"+TurntableUtils.getIndexProviderAgent(1)+"2:"+TurntableUtils.getIndexProviderAgent(2));
-        ProviderAgent returnValue = TurntableUtils.getNextValidPrivoderAgent(index%3);
+        ProviderAgent returnValue = TurntableUtils.getNextValidPrivoderAgent(index%Contants.TURNTABLE_SIZE_PER_PROVIDER*3);
         if (returnValue == null){
             throw new IllegalAccessError("there is no volid agent");
         }

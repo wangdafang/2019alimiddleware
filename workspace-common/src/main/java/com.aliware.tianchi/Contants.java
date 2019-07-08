@@ -17,7 +17,7 @@ public class Contants {
     public static final String PROVIDER_LISTENER_KEY_CPU = "cpu";
     public static final String PROVIDER_LISTENER_KEY_THREAD = "thread";
 
-    public static final int TURNTABLE_SIZE_PER_PROVIDER = 1;
+    public static final int TURNTABLE_SIZE_PER_PROVIDER = 10;
 
     public static final int MAX_USABILITY = 100;
 
