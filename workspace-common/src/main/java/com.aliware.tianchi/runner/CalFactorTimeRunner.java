@@ -28,7 +28,7 @@ public class CalFactorTimeRunner implements Runner {
                     e.printStackTrace();
                 }
             }
-        }, 0, 5);
+        }, 0, 2);
     }
 
     /**
@@ -47,10 +47,9 @@ public class CalFactorTimeRunner implements Runner {
             int usability = calUsability(rt, cpu, thread);
             totalUsability += usability;
             usabilityMap.put(i,usability);
-//            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
+            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
         }
-//        System.out.println(sb.toString());
-
+        System.out.println(sb.toString());
         //计算总占比
         Map<Integer ,Double > proportionMap = new HashMap<>();
         double totalProportion = 0d;
@@ -178,7 +177,21 @@ public class CalFactorTimeRunner implements Runner {
      * @return
      */
     private Double calProportion(int key,int usability ) {
-        double providerKeyPercent = (double)(key+1) /(double)6;
+//        double providerKeyPercent = (double)(key+1) /(double)6;
+        double providerKeyPercent = 0d;
+        switch(key%3){
+            case 0:
+                providerKeyPercent = (double)20/(double)115;
+                break;
+            case 1:
+                providerKeyPercent = (double)40/(double)115;
+                break;
+            case 2:
+                providerKeyPercent = (double)55/(double)115;
+                break;
+            default:
+                break;
+        }
         return providerKeyPercent * (double)usability;
     }
 
@@ -192,7 +205,7 @@ public class CalFactorTimeRunner implements Runner {
      * @return
      */
     private int calUsability(int rt, int cpu, int thread) {
-//        return Contants.MAX_USABILITY - (rt * 10 + cpu * 20 + thread * 70) /100;
+//        return Contants.MAX_USABILITY - (rt * 30 + cpu * 10 + (100-thread) * 60) /100;
 //        return Contants.MAX_USABILITY - (thread * 100) /100;
         return (thread * 100) /100;
     }

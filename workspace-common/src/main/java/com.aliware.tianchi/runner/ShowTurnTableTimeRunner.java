@@ -26,18 +26,28 @@ public class ShowTurnTableTimeRunner implements Runner {
                     e.printStackTrace();
                 }
             }
-        }, 0, 200);
+        }, 0, 2);
     }
 
 
     /**
+     *
      */
-    public void calculateIndex(){
+    public void calculateIndex() {
 
-        System.out.println("added:smallIndexes:"+TurntableUtils.getIndexesSize(0)+",mediumIndexes:"+
-                TurntableUtils.getIndexesSize(1)+",largeIndexes:"+
-                TurntableUtils.getIndexesSize(2)+",blankIndexes:"+
+        System.out.println("added:smallIndexes:" + TurntableUtils.getIndexesSize(0) + ",mediumIndexes:" +
+                TurntableUtils.getIndexesSize(1) + ",largeIndexes:" +
+                TurntableUtils.getIndexesSize(2) + ",blankIndexes:" +
                 TurntableUtils.getIndexesSize(3));
+//
+//        System.out.println("avgCosts:small:" + RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_SMALL) + ",medium:" +
+//                RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +
+//                RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_LARGE) );
+//        System.out.print("[");
+//        for(int i=0;i<30;i++){
+//            System.out.print(TurntableUtils.getIndexProviderAgent(i).getGroup()+",");
+//        }
+//        System.out.println("]");
 
     }
 
