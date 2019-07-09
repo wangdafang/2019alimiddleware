@@ -186,17 +186,22 @@ public class CalFactorTimeRunner implements Runner {
         double providerKeyPercent = 0d;
         switch(key%3){
             case 0:
-                providerKeyPercent = (double)140/(double)1150;
+//                providerKeyPercent = (double)140/(double)1150;
+                providerKeyPercent = (double)6/(double)29;
                 break;
             case 1:
-                providerKeyPercent = (double)430/(double)1150;
+//                providerKeyPercent = (double)430/(double)1150;
+                providerKeyPercent = (double)10/(double)29;
                 break;
             case 2:
-                providerKeyPercent = (double)580/(double)1150;
+//                providerKeyPercent = (double)580/(double)1150;
+                providerKeyPercent = (double)13/(double)29;
                 break;
             default:
                 break;
         }
+//        double providerKeyPercent = 1d;
+
         return providerKeyPercent * (double)usability;
     }
 

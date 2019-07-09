@@ -15,9 +15,9 @@ public class RuntimeSysUsablityContants {
     private static ConcurrentMap<String, Integer> currentUsablityMap = new ConcurrentHashMap();
 
     static{
-        currentUsablityMap.putIfAbsent(Contants.PROVIDER_KEY_SMALL,300);
-        currentUsablityMap.putIfAbsent(Contants.PROVIDER_KEY_MEDIUM,300);
-        currentUsablityMap.putIfAbsent(Contants.PROVIDER_KEY_LARGE,300);
+        currentUsablityMap.putIfAbsent(Contants.PROVIDER_KEY_SMALL,100);
+        currentUsablityMap.putIfAbsent(Contants.PROVIDER_KEY_MEDIUM,100);
+        currentUsablityMap.putIfAbsent(Contants.PROVIDER_KEY_LARGE,100);
     }
 
     public static void setCurrentUsablityMap(String key,Integer usablity) {

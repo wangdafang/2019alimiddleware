@@ -48,6 +48,10 @@ public class ShowTurnTableTimeRunner implements Runner {
                 RuntimeCpuContants.Server.getCurrCpuUsage(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +
                 RuntimeCpuContants.Server.getCurrCpuUsage(Contants.PROVIDER_KEY_LARGE) );
 
+        System.out.println("thread:small:" + RuntimeThreadContants.Server.getCurrThreadRatio(Contants.PROVIDER_KEY_SMALL) + ",medium:" +
+                RuntimeThreadContants.Server.getCurrThreadRatio(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +
+                RuntimeThreadContants.Server.getCurrThreadRatio(Contants.PROVIDER_KEY_LARGE) );
+
         System.out.println("system-usablity:small:" + RuntimeSysUsablityContants.getSystemUsablity((Contants.PROVIDER_KEY_SMALL)) + ",medium:" +
                 RuntimeSysUsablityContants.getSystemUsablity(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +
                 RuntimeSysUsablityContants.getSystemUsablity(Contants.PROVIDER_KEY_LARGE) );
