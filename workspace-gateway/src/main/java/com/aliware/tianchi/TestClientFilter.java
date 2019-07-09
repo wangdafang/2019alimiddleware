@@ -2,11 +2,7 @@ package com.aliware.tianchi;
 
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.extension.Activate;
-import org.apache.dubbo.rpc.Filter;
-import org.apache.dubbo.rpc.Invocation;
-import org.apache.dubbo.rpc.Invoker;
-import org.apache.dubbo.rpc.Result;
-import org.apache.dubbo.rpc.RpcException;
+import org.apache.dubbo.rpc.*;
 
 /**
  * @author daofeng.xjf
@@ -20,9 +16,9 @@ public class TestClientFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         try{
-            if (RuntimeSysUsablityContants.getTotalSystemUsablity() < 100){
+            if (RuntimeSysUsablityContants.getTotalSystemUsablity() < 50){
 //                System.out.println("refuse,currentTotalSystemUsablity:" + RuntimeSysUsablityContants.getTotalSystemUsablity() );
-                return null;
+                return new RpcResult();
             }
             Result result = invoker.invoke(invocation);
             return result;
