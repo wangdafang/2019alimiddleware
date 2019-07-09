@@ -1,5 +1,7 @@
 package com.aliware.tianchi;
 
+import com.sun.org.apache.xpath.internal.operations.String;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.ThreadMXBean;
@@ -36,4 +38,5 @@ public class CpuUsageCollector {
         preUsedTime = totalTime;
         return (((double) usedTime) / totalPassedTime / osMxBean.getAvailableProcessors()) * 100;
     }
+
 }
