@@ -50,7 +50,7 @@ public class TestRequestLimiter implements RequestLimiter {
                 throw new IllegalArgumentException("can't find key:"+quota+" in turntable indexes");
         }
 //        System.out.println("quota" + quota + "active:" + activeTaskCount + ",max:" + maxValue + ",max85%:" + maxValue*85*0.01);
-        if (activeTaskCount > maxValue*85*0.01){
+        if (activeTaskCount > maxValue*95*0.01){
             return false;
         }
 //        System.out.println("total call:" + Counter.currentIndex.getAndIncrement());
