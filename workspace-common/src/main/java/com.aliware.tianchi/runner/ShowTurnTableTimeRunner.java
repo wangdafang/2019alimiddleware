@@ -26,7 +26,7 @@ public class ShowTurnTableTimeRunner implements Runner {
                     e.printStackTrace();
                 }
             }
-        }, 0, 2);
+        }, 0, 500);
     }
 
 
@@ -43,6 +43,17 @@ public class ShowTurnTableTimeRunner implements Runner {
 //        System.out.println("avgCosts:small:" + RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_SMALL) + ",medium:" +
 //                RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +
 //                RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_LARGE) );
+
+        System.out.println("cpu:small:" + RuntimeCpuContants.Server.getCurrCpuUsage(Contants.PROVIDER_KEY_SMALL) + ",medium:" +
+                RuntimeCpuContants.Server.getCurrCpuUsage(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +
+                RuntimeCpuContants.Server.getCurrCpuUsage(Contants.PROVIDER_KEY_LARGE) );
+
+        System.out.println("system-usablity:small:" + RuntimeSysUsablityContants.getSystemUsablity((Contants.PROVIDER_KEY_SMALL)) + ",medium:" +
+                RuntimeSysUsablityContants.getSystemUsablity(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +
+                RuntimeSysUsablityContants.getSystemUsablity(Contants.PROVIDER_KEY_LARGE) );
+
+        System.out.println();
+
 //        System.out.print("[");
 //        for(int i=0;i<30;i++){
 //            System.out.print(TurntableUtils.getIndexProviderAgent(i).getGroup()+",");

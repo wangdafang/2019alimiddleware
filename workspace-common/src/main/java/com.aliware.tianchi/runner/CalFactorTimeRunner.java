@@ -45,6 +45,7 @@ public class CalFactorTimeRunner implements Runner {
             int cpu = RuntimeCpuContants.Server.getCurrCpuUsage(TurntableUtils.turntableNames[i]);
             int thread = RuntimeThreadContants.Server.getCurrThreadRatio(TurntableUtils.turntableNames[i]);
             int usability = calUsability(rt, cpu, thread);
+            RuntimeSysUsablityContants.setCurrentUsablityMap(TurntableUtils.turntableNames[i],usability);
             totalUsability += usability;
             usabilityMap.put(i,usability);
 //            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
@@ -87,7 +88,7 @@ public class CalFactorTimeRunner implements Runner {
             }
 
         }
-//        RuntimeSysUsablityContants.setSystemUsability(totalUnUsability * 33);
+//        RuntimeSysUsablityContants.setSystemUsability(totalUsability);
 
     }
 
@@ -178,6 +179,10 @@ public class CalFactorTimeRunner implements Runner {
      */
     private Double calProportion(int key,int usability ) {
 //        double providerKeyPercent = (double)(key+1) /(double)6;
+        if (RuntimeSysUsablityContants.getSystemUsablity(TurntableUtils.turntableNames[key]) < 15){//如果系统可用率小于15%，直接占比为0
+            return 0d;
+        }
+
         double providerKeyPercent = 0d;
         switch(key%3){
             case 0:
@@ -207,7 +212,11 @@ public class CalFactorTimeRunner implements Runner {
     private int calUsability(int rt, int cpu, int thread) {
 //        return Contants.MAX_USABILITY - (rt * 30 + cpu * 10 + (100-thread) * 60) /100;
 //        return Contants.MAX_USABILITY - (thread * 100) /100;
-        return (thread * 100) /100;
+//        return (thread * 100) /100;
+        if (cpu > 80 || thread < 20){//如果cpu超过90或者可用线程数小于20，则直接认为系统可用率为0
+            return 0;
+        }
+        return (thread * 50 + (100 - cpu) * 50) /100;
     }
 
 
