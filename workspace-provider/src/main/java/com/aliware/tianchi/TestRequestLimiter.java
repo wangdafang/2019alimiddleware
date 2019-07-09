@@ -55,7 +55,7 @@ public class TestRequestLimiter implements RequestLimiter {
         }
 //        System.out.println("total call:" + Counter.currentIndex.getAndIncrement());
         if ((Counter.currentIndex.getAndIncrement() % 1000) == 0){
-            logger.info("quota:"+quota + ",total call:"+ Counter.currentIndex.get());
+            logger.info("quota:"+quota + ",total call:"+ Counter.currentIndex.get() + ",cpu;" + RuntimeCpuContants.Client.getCpuUsage());
         }
         return true;
     }
