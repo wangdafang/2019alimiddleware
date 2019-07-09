@@ -50,13 +50,13 @@ public class TestRequestLimiter implements RequestLimiter {
                 throw new IllegalArgumentException("can't find key:"+quota+" in turntable indexes");
         }
 //        System.out.println("quota" + quota + "active:" + activeTaskCount + ",max:" + maxValue + ",max85%:" + maxValue*85*0.01);
-        if (activeTaskCount > maxValue*85*0.01){
+        if (activeTaskCount > maxValue*85*0.01 || RuntimeCpuContants.Client.getCpuUsage()>80){
             return false;
         }
 //        System.out.println("total call:" + Counter.currentIndex.getAndIncrement());
-        if ((Counter.currentIndex.getAndIncrement() % 1000) == 0){
-            logger.info("quota:"+quota + ",total call:"+ Counter.currentIndex.get() + ",cpu;" + RuntimeCpuContants.Client.getCpuUsage());
-        }
+//        if ((Counter.currentIndex.getAndIncrement() % 1000) == 0){
+//            logger.info("quota:"+quota + ",total call:"+ Counter.currentIndex.get() + ",cpu;" + RuntimeCpuContants.Client.getCpuUsage());
+//        }
         return true;
     }
 
