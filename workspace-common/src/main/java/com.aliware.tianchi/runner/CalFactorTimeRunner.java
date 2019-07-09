@@ -28,7 +28,7 @@ public class CalFactorTimeRunner implements Runner {
                     e.printStackTrace();
                 }
             }
-        }, 0, 2);
+        }, 0, 1);
     }
 
     /**
@@ -47,9 +47,9 @@ public class CalFactorTimeRunner implements Runner {
             int usability = calUsability(rt, cpu, thread);
             totalUsability += usability;
             usabilityMap.put(i,usability);
-            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
+//            sb.append("group:").append(TurntableUtils.turntableNames[i]).append(",usability:").append(usability).append("\n");
         }
-        System.out.println(sb.toString());
+//        System.out.println(sb.toString());
         //计算总占比
         Map<Integer ,Double > proportionMap = new HashMap<>();
         double totalProportion = 0d;
@@ -181,13 +181,13 @@ public class CalFactorTimeRunner implements Runner {
         double providerKeyPercent = 0d;
         switch(key%3){
             case 0:
-                providerKeyPercent = (double)20/(double)115;
+                providerKeyPercent = (double)12/(double)115;
                 break;
             case 1:
-                providerKeyPercent = (double)40/(double)115;
+                providerKeyPercent = (double)45/(double)115;
                 break;
             case 2:
-                providerKeyPercent = (double)55/(double)115;
+                providerKeyPercent = (double)58/(double)115;
                 break;
             default:
                 break;

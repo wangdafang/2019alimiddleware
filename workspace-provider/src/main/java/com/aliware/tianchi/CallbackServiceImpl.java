@@ -32,7 +32,7 @@ public class CallbackServiceImpl implements CallbackService {
 
     public CallbackServiceImpl() {
 
-        CpuUsageCollectTimeRunner cpuCollectRunner = new CpuUsageCollectTimeRunner();
+//        CpuUsageCollectTimeRunner cpuCollectRunner = new CpuUsageCollectTimeRunner();
         ThreadNumsCollectTimeRunner threadCollectRunner = new ThreadNumsCollectTimeRunner();
 
         timer.schedule(new TimerTask() {

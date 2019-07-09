@@ -17,7 +17,7 @@ public class CallbackListenerImpl implements CallbackListener {
 
     public CallbackListenerImpl() {
         CalFactorTimeRunner calFactorRunner = new CalFactorTimeRunner();
-        ShowTurnTableTimeRunner showRunner = new ShowTurnTableTimeRunner();
+//        ShowTurnTableTimeRunner showRunner = new ShowTurnTableTimeRunner();
     }
 
     @Override
