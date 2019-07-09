@@ -31,6 +31,7 @@ public class CallbackListenerImpl implements CallbackListener {
         RuntimeAvgContants.Server.setAvgCosts(providerKey,Integer.parseInt(params[1]));
         RuntimeCpuContants.Server.setCpuUsage(providerKey,Integer.parseInt(params[2]));
         RuntimeThreadContants.Server.setThreadRatio(providerKey,Integer.parseInt(params[3]));
+
 //        StringBuffer sb = new StringBuffer();
 //        sb.append(providerKey)
 //        .append("-avgRt:")

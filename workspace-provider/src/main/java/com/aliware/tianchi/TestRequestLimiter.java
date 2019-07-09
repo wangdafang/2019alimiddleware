@@ -20,6 +20,11 @@ public class TestRequestLimiter implements RequestLimiter {
      */
     @Override
     public boolean tryAcquire(Request request, int activeTaskCount) {
+//        System.out.println("ratio:"+RuntimeThreadContants.Client.getThreadRatio());
+//        System.out.println("cpu:"+RuntimeCpuContants.Client.getCpuUsage());
+        if (RuntimeThreadContants.Client.getThreadRatio() <40 || RuntimeCpuContants.Client.getCpuUsage()>60){
+            return false;
+        }
         return true;
     }
 

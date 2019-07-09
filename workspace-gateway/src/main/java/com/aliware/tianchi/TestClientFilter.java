@@ -24,6 +24,7 @@ public class TestClientFilter implements Filter {
             return result;
         }catch (Exception e){
             throw e;
+//            return null;
         }
 
     }
