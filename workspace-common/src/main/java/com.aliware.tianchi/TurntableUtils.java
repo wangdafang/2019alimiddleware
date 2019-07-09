@@ -100,11 +100,11 @@ public class TurntableUtils {
         for (int i=nums-1;i>=0;i--){
 //            int index = indexes.size()-(i+1);
             ProviderAgent agent = turntable[indexes.get(i)];
-            agent.setName(turntableNames[blankGroup]);
             agent.setValid(false);
+            indexes.remove(i);
+            agent.setName(turntableNames[blankGroup]);
             agent.setGroup(blankGroup);
             blankIndexes.add(agent.getIndex());
-            indexes.remove(i);
         }
     }
 
@@ -147,10 +147,10 @@ public class TurntableUtils {
         }
         for (int i=(nums-1);i>=0;i--){
             ProviderAgent agent = turntable[blankIndexes.get(i)];
-            indexes.add(agent.getIndex());
             agent.setName(turntableNames[group]);
-            agent.setValid(true);
             agent.setGroup(group);
+            agent.setValid(true);
+            indexes.add(agent.getIndex());
             blankIndexes.remove(i);
         }
     }

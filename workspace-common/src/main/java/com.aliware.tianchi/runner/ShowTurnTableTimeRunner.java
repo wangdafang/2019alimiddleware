@@ -40,9 +40,9 @@ public class ShowTurnTableTimeRunner implements Runner {
                 TurntableUtils.getIndexesSize(2) + ",blankIndexes:" +
                 TurntableUtils.getIndexesSize(3));
 //
-//        System.out.println("avgCosts:small:" + RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_SMALL) + ",medium:" +
-//                RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +
-//                RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_LARGE) );
+        System.out.println("avgCosts:small:" + RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_SMALL) + ",medium:" +
+                RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +
+                RuntimeAvgContants.Server.getCurrAvgCosts(Contants.PROVIDER_KEY_LARGE) );
 
         System.out.println("cpu:small:" + RuntimeCpuContants.Server.getCurrCpuUsage(Contants.PROVIDER_KEY_SMALL) + ",medium:" +
                 RuntimeCpuContants.Server.getCurrCpuUsage(Contants.PROVIDER_KEY_MEDIUM) + ",large:" +

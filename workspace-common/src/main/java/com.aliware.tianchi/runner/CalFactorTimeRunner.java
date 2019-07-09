@@ -183,24 +183,24 @@ public class CalFactorTimeRunner implements Runner {
             return 0d;
         }
 
-        double providerKeyPercent = 0d;
-        switch(key%3){
-            case 0:
-//                providerKeyPercent = (double)140/(double)1150;
-                providerKeyPercent = (double)6/(double)29;
-                break;
-            case 1:
-//                providerKeyPercent = (double)430/(double)1150;
-                providerKeyPercent = (double)10/(double)29;
-                break;
-            case 2:
-//                providerKeyPercent = (double)580/(double)1150;
-                providerKeyPercent = (double)13/(double)29;
-                break;
-            default:
-                break;
-        }
-//        double providerKeyPercent = 1d;
+//        double providerKeyPercent = 0d;
+//        switch(key%3){
+//            case 0:
+////                providerKeyPercent = (double)140/(double)1150;
+//                providerKeyPercent = (double)6/(double)29;
+//                break;
+//            case 1:
+////                providerKeyPercent = (double)430/(double)1150;
+//                providerKeyPercent = (double)10/(double)29;
+//                break;
+//            case 2:
+////                providerKeyPercent = (double)580/(double)1150;
+//                providerKeyPercent = (double)13/(double)29;
+//                break;
+//            default:
+//                break;
+//        }
+        double providerKeyPercent = 1d;
 
         return providerKeyPercent * (double)usability;
     }
@@ -218,10 +218,10 @@ public class CalFactorTimeRunner implements Runner {
 //        return Contants.MAX_USABILITY - (rt * 30 + cpu * 10 + (100-thread) * 60) /100;
 //        return Contants.MAX_USABILITY - (thread * 100) /100;
 //        return (thread * 100) /100;
-        if (cpu > 80 || thread < 20){//如果cpu超过90或者可用线程数小于20，则直接认为系统可用率为0
+        if (cpu > 80 || thread < 20 || rt > 400){//如果cpu超过90或者可用线程数小于20，则直接认为系统可用率为0
             return 0;
         }
-        return (thread * 50 + (100 - cpu) * 50) /100;
+        return (rt * 60 + thread * 10 +  (100 - cpu) * 30) /100;
     }
 
 
