@@ -23,10 +23,10 @@ public class RuntimeAvgContants {
             if(avgCosts>5000){
                 return;
             }
-            if (avgCosts > 500){
-                avgCosts = 500;
+            if (avgCosts > 300){
+                avgCosts = 300;
             }
-            RuntimeAvgContants.Client.avgCosts = (RuntimeAvgContants.Client.avgCosts + (avgCosts*100)/500)/2;
+            RuntimeAvgContants.Client.avgCosts = (RuntimeAvgContants.Client.avgCosts + (avgCosts*100)/300)/2;
         }
     }
 

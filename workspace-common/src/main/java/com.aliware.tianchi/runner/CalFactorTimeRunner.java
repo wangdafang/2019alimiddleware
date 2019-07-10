@@ -221,7 +221,7 @@ public class CalFactorTimeRunner implements Runner {
         if (cpu > 80 || thread < 20 || rt > 400){//如果cpu超过90或者可用线程数小于20，则直接认为系统可用率为0
             return 0;
         }
-        return (rt * 55 + thread * 10 +  (100 - cpu) * 35) /100;
+        return ((100 - rt) * 55 + thread * 10 +  (100 - cpu) * 35) /100;
     }
 
 
