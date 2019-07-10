@@ -222,6 +222,7 @@ public class CalFactorTimeRunner implements Runner {
             return 0;
         }
         return ((100 - rt) * 55 + thread * 10 +  (100 - cpu) * 35) /100;
+
     }
 
 
