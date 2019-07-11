@@ -114,7 +114,7 @@ public class RingBufferTable {
     }
 
     public static ProviderAgent getNextValidProvider() {
-        int index = RingBufferTable.currentIndex.get();
+        int index = RingBufferTable.currentIndex.getAndIncrement();
         int ringTableSize = RingBufferTable.ringTableSize;
         if (ringTableSize == 0){
             return null;
