@@ -12,10 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author daofeng.xjf
+ * @update dafang
  * <p>
  * 服务端回调服务
  * 可选接口
  * 用户可以基于此服务，实现服务端向客户端动态推送的功能
+ *
+ *
  */
 public class CallbackServiceImpl implements CallbackService {
 
@@ -37,13 +40,15 @@ public class CallbackServiceImpl implements CallbackService {
 //                            System.out.println(sb.toString());
                             entry.getValue().receiveServerMsg(sb.toString());
                         } catch (Throwable t1) {
-                            t1.printStackTrace();
+                            //TODO 此处会导致当线程池满之后，不再向服务端推送信息
 //                            listeners.remove(entry.getKey());
+                            t1.printStackTrace();
                         }
                     }
                 }
             }
         }, 0, 5);
+
     }
 
     private Timer timer = new Timer();

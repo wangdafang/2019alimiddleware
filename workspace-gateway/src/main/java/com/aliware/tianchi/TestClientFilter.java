@@ -9,8 +9,6 @@ import org.apache.dubbo.rpc.Invoker;
 import org.apache.dubbo.rpc.Result;
 import org.apache.dubbo.rpc.RpcException;
 
-import java.util.Map;
-
 /**
  * @author daofeng.xjf
  *
@@ -32,6 +30,7 @@ public class TestClientFilter implements Filter {
             return result;
         }catch (Exception e){
             throw e;
+//            return null;
         }
 
     }

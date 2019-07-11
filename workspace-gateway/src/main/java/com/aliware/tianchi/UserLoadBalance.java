@@ -21,6 +21,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class UserLoadBalance implements LoadBalance {
 
+
+
     @Override
     public <T> Invoker<T> select(List<Invoker<T>> invokers, URL url, Invocation invocation) throws RpcException {
         int group = 0;
@@ -42,6 +44,18 @@ public class UserLoadBalance implements LoadBalance {
             throw new IllegalArgumentException("no valid provide thread exist!!!!");
         }
         return agent;
+
+    }
+
+
+
+
+    public static void main(String[] args) {
+        for(int i=0;i<50;i++){
+//            System.out.println(i%(10*3));
+            System.out.println(i%10*3);
+
+        }
     }
 }
 

@@ -39,7 +39,7 @@ public class RingBufferTable {
     private static void initRingTable() {
         if (ringTable.length < newRingTableSize) {
             int shouleInitSize = newRingTableSize - ringTable.length;
-//            System.out.println("prepare expand ringbuffer table,should operate:" + shouleInitSize);
+            System.out.println("prepare expand ringbuffer table,should operate:" + shouleInitSize);
             Map<String,Integer> changeMap = RuntimeMaxThreadContants.Server.getChangeValue();
             if (changeMap!= null && changeMap.size()>0){
                 int totalChangeValue = 0;
@@ -47,7 +47,7 @@ public class RingBufferTable {
                     totalChangeValue += entry.getValue();
                 }
                 if (totalChangeValue != shouleInitSize){
-//                    System.out.println("operate nums is not equals,totalChangeValue:"+totalChangeValue+",shouleInitSize:"+shouleInitSize);
+                    System.out.println("operate nums is not equals,totalChangeValue:"+totalChangeValue+",shouleInitSize:"+shouleInitSize);
                     return;
                 }
             }
@@ -63,7 +63,7 @@ public class RingBufferTable {
                 }
                 ringSize = end;
             }
-//            System.out.println("new ring table size : " + ringTable.length);
+            System.out.println("new ring table size : " + ringTable.length);
             System.arraycopy(RingBufferTable.ringTable, 0, ringTable, 0, RingBufferTable.ringTable.length);
             //对新数组打乱顺序
             ringTable = RingBufferTable.randomRingTable(ringTable,RingBufferTable.newRingTableSize);
