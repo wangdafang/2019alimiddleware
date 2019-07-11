@@ -13,7 +13,7 @@ import org.apache.dubbo.remoting.transport.RequestLimiter;
  * 在提交给后端线程池之前的扩展，可以用于服务端控制拒绝请求
  */
 public class TestRequestLimiter implements RequestLimiter {
-    private static final Logger logger = LoggerFactory.getLogger(TestRequestLimiter.class);
+//    private static final Logger logger = LoggerFactory.getLogger(TestRequestLimiter.class);
 
     /**
      * @param request 服务请求

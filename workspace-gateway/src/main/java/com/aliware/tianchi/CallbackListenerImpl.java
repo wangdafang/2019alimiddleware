@@ -20,12 +20,13 @@ public class CallbackListenerImpl implements CallbackListener {
     @Override
     public void receiveServerMsg(String msg) {
         if (StringUtils.isBlank(msg) || msg.indexOf(" ") >= 0) {
-            String[] params = msg.split(":");
-            String providerKey = params[0];
-
-            RingBufferTable.getAndSetGroup(providerKey);
-            RuntimeMaxThreadContants.Server.setMaxThreadNums(providerKey, Integer.parseInt(params[1]));
+            return;
         }
+        String[] params = msg.split(":");
+        String providerKey = params[0];
+
+        RingBufferTable.getAndSetGroup(providerKey);
+        RuntimeMaxThreadContants.Server.setMaxThreadNums(providerKey, Integer.parseInt(params[1]));
 
     }
 }
