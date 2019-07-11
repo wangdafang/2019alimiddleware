@@ -44,8 +44,8 @@ public class RingBufferTable {
 //                + ",blockSize:" + Counter.blockSize.get()
 //                + ",randomCount:" + Counter.randomCount.getAndIncrement());
 
-        if (RingBufferTable.ringTable.length < newRingTableSize) {
-
+        if (RingBufferTable.ringTable.length >= newRingTableSize) {
+            return;
         }
         Map<String,Object> currData = RuntimeMaxThreadContants.Server.getCurrData();
         int newRingTableSize = (int)currData.get("totalMaxThread");

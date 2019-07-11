@@ -23,6 +23,7 @@ public class TestRequestLimiter implements RequestLimiter {
      */
     @Override
     public boolean tryAcquire(Request request, int activeTaskCount) {
+//        logger.info("current active task : " + activeTaskCount);
 //        if ((Counter.currentIndex.getAndIncrement() % 1000) == 0) {
 //            logger.info("total call:" + Counter.currentIndex.get() + ",thread:" + RuntimeMaxThreadContants.Server.getMaxThreadNums());
 //        }

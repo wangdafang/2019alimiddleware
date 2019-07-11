@@ -20,15 +20,17 @@ import org.apache.dubbo.rpc.RpcException;
 public class TestClientFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
+        int index = 0;
         try{
             String providerIndex = invocation.getAttachment("ringbuffer_index");
             if (!StringUtils.isBlank(providerIndex)){
-                int index = Integer.parseInt(providerIndex);
+                index = Integer.parseInt(providerIndex);
                 RingBufferTable.disableOne(index);
             }
             Result result = invoker.invoke(invocation);
             return result;
         }catch (Exception e){
+            RingBufferTable.enableOne(index);
             throw e;
 //            return null;
         }
