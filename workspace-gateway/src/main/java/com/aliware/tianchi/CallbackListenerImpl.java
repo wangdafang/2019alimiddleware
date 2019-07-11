@@ -1,5 +1,8 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.runner.CalRingBufferTableRunner;
+import com.aliware.tianchi.runner.ThreadCollectRunner;
+import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.rpc.listener.CallbackListener;
 
 /**
@@ -12,9 +15,21 @@ import org.apache.dubbo.rpc.listener.CallbackListener;
  */
 public class CallbackListenerImpl implements CallbackListener {
 
+    public CallbackListenerImpl() {
+        CalRingBufferTableRunner calRunner = new CalRingBufferTableRunner();
+    }
+
     @Override
     public void receiveServerMsg(String msg) {
-        System.out.println("receive msg from server :" + msg);
+        if (StringUtils.isBlank(msg) || msg.indexOf(" ")>=0){
+            return;
+        }
+        String[] params = msg.split(":");
+        String providerKey = params[0];
+
+        RingBufferTable.getAndSetGroup(providerKey);
+        RuntimeMaxThreadContants.Server.setMaxThreadNums(providerKey,Integer.parseInt(params[1]));
+
     }
 
 }

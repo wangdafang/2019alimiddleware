@@ -2,11 +2,14 @@ package com.aliware.tianchi;
 
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.extension.Activate;
+import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.rpc.Filter;
 import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.Invoker;
 import org.apache.dubbo.rpc.Result;
 import org.apache.dubbo.rpc.RpcException;
+
+import java.util.Map;
 
 /**
  * @author daofeng.xjf
@@ -20,6 +23,11 @@ public class TestClientFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         try{
+            String providerIndex = invocation.getAttachment("ringbuffer_index");
+            if (!StringUtils.isBlank(providerIndex)){
+                int index = Integer.parseInt(providerIndex);
+                RingBufferTable.disableOne(index);
+            }
             Result result = invoker.invoke(invocation);
             return result;
         }catch (Exception e){
@@ -30,6 +38,12 @@ public class TestClientFilter implements Filter {
 
     @Override
     public Result onResponse(Result result, Invoker<?> invoker, Invocation invocation) {
+        String providerIndex = invocation.getAttachment("ringbuffer_index");
+        if (!StringUtils.isBlank(providerIndex)){
+            int index = Integer.parseInt(providerIndex);
+            RingBufferTable.enableOne(index);
+        }
+
         return result;
     }
 }

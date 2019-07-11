@@ -1,5 +1,7 @@
 package com.aliware.tianchi;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.remoting.exchange.Request;
 import org.apache.dubbo.remoting.transport.RequestLimiter;
 
@@ -12,6 +14,8 @@ import org.apache.dubbo.remoting.transport.RequestLimiter;
  */
 public class TestRequestLimiter implements RequestLimiter {
 
+//    Logger logger = LoggerFactory.getLogger(TestRequestLimiter.class);
+
     /**
      * @param request 服务请求
      * @param activeTaskCount 服务端对应线程池的活跃线程数
@@ -20,6 +24,9 @@ public class TestRequestLimiter implements RequestLimiter {
      */
     @Override
     public boolean tryAcquire(Request request, int activeTaskCount) {
+//        if ((Counter.currentIndex.getAndIncrement() % 100) == 0){
+//            logger.info("total call:"+ Counter.currentIndex.get() + ",thread:" + RuntimeMaxThreadContants.Server.getMaxThreadNums());
+//        }
         return true;
     }
 

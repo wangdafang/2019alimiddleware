@@ -1,5 +1,6 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.runner.ThreadCollectRunner;
 import org.apache.dubbo.rpc.listener.CallbackListener;
 import org.apache.dubbo.rpc.service.CallbackService;
 
@@ -19,20 +20,30 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CallbackServiceImpl implements CallbackService {
 
     public CallbackServiceImpl() {
+
+        ThreadCollectRunner threadRunner = new ThreadCollectRunner();
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (!listeners.isEmpty()) {
                     for (Map.Entry<String, CallbackListener> entry : listeners.entrySet()) {
                         try {
-                            entry.getValue().receiveServerMsg(System.getProperty("quota") + " " + new Date().toString());
+                            //数据格式：small:{avgRt}:{cpu}:{thread}
+                            StringBuffer sb = new StringBuffer();
+                            sb.append(System.getProperty("quota"))
+                                    .append(":")
+                                    .append(RuntimeMaxThreadContants.Client.getMaxThreadNums());
+//                            System.out.println(sb.toString());
+                            entry.getValue().receiveServerMsg(sb.toString());
                         } catch (Throwable t1) {
-                            listeners.remove(entry.getKey());
+                            t1.printStackTrace();
+//                            listeners.remove(entry.getKey());
                         }
                     }
                 }
             }
-        }, 0, 5000);
+        }, 0, 5);
     }
 
     private Timer timer = new Timer();
