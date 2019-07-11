@@ -19,8 +19,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RingBufferTable {
 
-//    private static final Logger logger = LoggerFactory.getLogger(RingBufferTable.class);
+    private static final Logger logger = LoggerFactory.getLogger(RingBufferTable.class);
 
+    private static Object block = new Object();
 
     public static AtomicInteger currentIndex = new AtomicInteger(0);
     public static AtomicInteger enableSize = new AtomicInteger(0);
@@ -35,49 +36,51 @@ public class RingBufferTable {
 
     public volatile static ProviderAgent[] ringTable = new ProviderAgent[ringTableSize];
 
-//    static{
-//        for (int i=0;i<Contants.RINGBUFFER_TABLE_SIZE;i++){
-//            ringTable[i] = new ProviderAgent(i%3,true,(i%3)+"",i);//FIXME 此处的用意是为了让程序在初始化的时候，可以有请求打到每个provider上，后面需要优化
-//        }
-//    }
-
     private static void initRingTable() {
 //        logger.info("current ringbuffer table size:" + ringTable.length + ",newRingTableSize:" + newRingTableSize);
 
-        if (ringTable.length < newRingTableSize) {
-            int shouleInitSize = newRingTableSize - ringTable.length;
-//            logger.info("prepare expand ringbuffer table,should operate:" + shouleInitSize);
-            Map<String,Integer> changeMap = RuntimeMaxThreadContants.Server.getChangeValue();
-            if (changeMap!= null && changeMap.size()>0){
-                int totalChangeValue = 0;
-                for (Map.Entry<String,Integer> entry : changeMap.entrySet()){
-                    totalChangeValue += entry.getValue();
-                }
-                if (totalChangeValue != shouleInitSize){
-//                    logger.info("operate nums is not equals,totalChangeValue:"+totalChangeValue+",shouleInitSize:"+shouleInitSize);
-                    return;
-                }
-            }
+//        logger.info("current ringbuffer table size:" + ringTable.length
+//                + ",newRingTableSize:" + newRingTableSize
+//                + ",blockSize:" + Counter.blockSize.get()
+//                + ",randomCount:" + Counter.randomCount.getAndIncrement());
 
-            ProviderAgent[] ringTable = new ProviderAgent[newRingTableSize];
-            int ringSize = RingBufferTable.ringTable.length;
+        if (RingBufferTable.ringTable.length < newRingTableSize) {
 
-            for (Map.Entry<String,Integer> entry : changeMap.entrySet()){
-                int begin = ringSize;
-                int end = ringSize + entry.getValue();
-                for (int i = begin; i < end; i++) {
-                    ringTable[i] = new ProviderAgent(RingBufferTable.getAndSetGroup(entry.getKey()),true,entry.getKey(),i);
-                }
-                ringSize = end;
-            }
-//            logger.info("new ring table size : " + ringTable.length);
-            System.arraycopy(RingBufferTable.ringTable, 0, ringTable, 0, RingBufferTable.ringTable.length);
-            //对新数组打乱顺序
-            ringTable = RingBufferTable.randomRingTable(ringTable,RingBufferTable.newRingTableSize);
-            RingBufferTable.ringTable = ringTable;
-            RingBufferTable.ringTableSize = RingBufferTable.newRingTableSize;
-            RuntimeMaxThreadContants.Server.clearLastChangeThreadMap();
         }
+        Map<String,Object> currData = RuntimeMaxThreadContants.Server.getCurrData();
+        int newRingTableSize = (int)currData.get("totalMaxThread");
+        Map<String,Integer> changeMap = (Map<String,Integer>)currData.get("lastChangeThreadMap");
+        int shouleInitSize = newRingTableSize - RingBufferTable.ringTable.length;
+//            logger.info("prepare expand ringbuffer table,should operate:" + shouleInitSize);
+        int totalChangeValue = 0;
+        if (changeMap!= null && changeMap.size()>0){
+            for (Map.Entry<String,Integer> entry : changeMap.entrySet()){
+                totalChangeValue += entry.getValue();
+            }
+
+            if (totalChangeValue != shouleInitSize){
+//                    logger.info("operate nums is not equals,totalChangeValue:"+totalChangeValue+",shouleInitSize:"+shouleInitSize);
+                return;
+            }
+        }
+
+        ProviderAgent[] ringTable = new ProviderAgent[newRingTableSize];
+        int ringSize = RingBufferTable.ringTable.length;
+
+        for (Map.Entry<String,Integer> entry : changeMap.entrySet()){
+            int begin = ringSize;
+            int end = ringSize + entry.getValue();
+            for (int i = begin; i < end; i++) {
+                ringTable[i] = new ProviderAgent(RingBufferTable.getAndSetGroup(entry.getKey()),true,entry.getKey(),i);
+            }
+            ringSize = end;
+        }
+//            logger.info("new ring table size : " + ringTable.length);
+        System.arraycopy(RingBufferTable.ringTable, 0, ringTable, 0, RingBufferTable.ringTable.length);
+        //对新数组打乱顺序
+        ringTable = RingBufferTable.randomRingTable(ringTable,newRingTableSize);
+        RingBufferTable.ringTable = ringTable;
+        RingBufferTable.ringTableSize = newRingTableSize;
     }
 
     private static ProviderAgent[] randomRingTable(ProviderAgent[] ringTable,int size) {
@@ -111,16 +114,16 @@ public class RingBufferTable {
     }
 
     public static ProviderAgent getNextValidProvider() {
-        int index = currentIndex.get();
+        int index = RingBufferTable.currentIndex.get();
         int ringTableSize = RingBufferTable.ringTableSize;
         if (ringTableSize == 0){
             return null;
         }
         int i = (index) % ringTableSize;
         do {
-            if (ringTable[i].isValid()) {
-                ringTable[i].disable();
-                return ringTable[i];
+            if (RingBufferTable.ringTable[i].isValid()) {
+                RingBufferTable.ringTable[i].disable();
+                return RingBufferTable.ringTable[i];
             }
             i = (++i) % ringTableSize;
         } while (i != index);
@@ -129,11 +132,11 @@ public class RingBufferTable {
     }
 
     public static int getAndSetGroup(String quota){
-        if (providerGroup.containsKey(quota)){
-            return providerGroup.get(quota);
+        if (RingBufferTable.providerGroup.containsKey(quota)){
+            return RingBufferTable.providerGroup.get(quota);
         }
-        int group = groupIndex.getAndIncrement();
-        providerGroup.putIfAbsent(quota,group);
+        int group = RingBufferTable.groupIndex.getAndIncrement();
+        RingBufferTable.providerGroup.putIfAbsent(quota,group);
         return group;
     }
 
@@ -141,14 +144,16 @@ public class RingBufferTable {
         if (index < 0 || index > RingBufferTable.ringTableSize) {
             return;
         }
-        ringTable[index].disable();
+        RingBufferTable.ringTable[index].disable();
+//        Counter.blockSize.getAndIncrement();
     }
 
     public static void enableOne(int index) {
         if (index < 0 || index > RingBufferTable.ringTableSize) {
             return;
         }
-        ringTable[index].enable();
+        RingBufferTable.ringTable[index].enable();
+//        Counter.blockSize.getAndDecrement();
     }
 
     public static void main(String[] args) {
@@ -159,12 +164,12 @@ public class RingBufferTable {
             total = i+1;
             RuntimeMaxThreadContants.Server.setMaxThreadNums(group+"",total);
 
-            RingBufferTable.resetNewRingTableSize(RuntimeMaxThreadContants.Server.getMaxThreadNums());
+//            RingBufferTable.resetNewRingTableSize(RuntimeMaxThreadContants.Server.getMaxThreadNums());
 
             RingBufferTable.expandTable();
             System.out.print("group-[");
-            for(int j=0;j<ringTable.length;j++){
-                System.out.print(ringTable[j].getGroup()+",");
+            for(int j=0;j<RingBufferTable.ringTable.length;j++){
+                System.out.print(RingBufferTable.ringTable[j].getGroup()+",");
             }
             System.out.println("]");
 //            System.out.print("index-[");

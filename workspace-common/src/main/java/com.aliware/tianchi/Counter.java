@@ -13,5 +13,7 @@ public class Counter {
 
     public static AtomicInteger randomCount = new AtomicInteger(0);
 
+    public static AtomicInteger blockSize = new AtomicInteger(0);
+
 
 }

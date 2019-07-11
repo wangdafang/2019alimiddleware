@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class UserLoadBalance implements LoadBalance {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserLoadBalance.class);
+//    private static final Logger logger = LoggerFactory.getLogger(UserLoadBalance.class);
 
 
     @Override
@@ -36,7 +36,8 @@ public class UserLoadBalance implements LoadBalance {
             Map<String, String> attachments = invocation.getAttachments();
             attachments.put("ringbuffer_index",index+"");
         } catch (Exception e) {
-            logger.info("run in random method" + Counter.randomCount.getAndIncrement()+",error:" + e.getMessage());
+//            logger.info("run in random method" + Counter.randomCount.getAndIncrement()+",error:" + e.getMessage());
+//            Counter.randomCount.getAndIncrement();
             return invokers.get(ThreadLocalRandom.current().nextInt(invokers.size()));
         }
         return invokers.get(group);

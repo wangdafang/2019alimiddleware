@@ -27,7 +27,7 @@ public class CalRingBufferTableRunner {
                     e.printStackTrace();
                 }
             }
-        }, 0, 2);
+        }, 0, 5);
     }
 
     /**
