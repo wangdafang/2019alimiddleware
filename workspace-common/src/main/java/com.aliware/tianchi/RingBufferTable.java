@@ -3,6 +3,8 @@ package com.aliware.tianchi;
 
 
 import com.aliware.tianchi.domain.ProviderAgent;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author dafang
  */
 public class RingBufferTable {
+
+//    private static final Logger logger = LoggerFactory.getLogger(RingBufferTable.class);
+
 
     public static AtomicInteger currentIndex = new AtomicInteger(0);
     public static AtomicInteger enableSize = new AtomicInteger(0);
@@ -37,9 +42,11 @@ public class RingBufferTable {
 //    }
 
     private static void initRingTable() {
+//        logger.info("current ringbuffer table size:" + ringTable.length + ",newRingTableSize:" + newRingTableSize);
+
         if (ringTable.length < newRingTableSize) {
             int shouleInitSize = newRingTableSize - ringTable.length;
-//            System.out.println("prepare expand ringbuffer table,should operate:" + shouleInitSize);
+//            logger.info("prepare expand ringbuffer table,should operate:" + shouleInitSize);
             Map<String,Integer> changeMap = RuntimeMaxThreadContants.Server.getChangeValue();
             if (changeMap!= null && changeMap.size()>0){
                 int totalChangeValue = 0;
@@ -47,7 +54,7 @@ public class RingBufferTable {
                     totalChangeValue += entry.getValue();
                 }
                 if (totalChangeValue != shouleInitSize){
-//                    System.out.println("operate nums is not equals,totalChangeValue:"+totalChangeValue+",shouleInitSize:"+shouleInitSize);
+//                    logger.info("operate nums is not equals,totalChangeValue:"+totalChangeValue+",shouleInitSize:"+shouleInitSize);
                     return;
                 }
             }
@@ -63,7 +70,7 @@ public class RingBufferTable {
                 }
                 ringSize = end;
             }
-//            System.out.println("new ring table size : " + ringTable.length);
+//            logger.info("new ring table size : " + ringTable.length);
             System.arraycopy(RingBufferTable.ringTable, 0, ringTable, 0, RingBufferTable.ringTable.length);
             //对新数组打乱顺序
             ringTable = RingBufferTable.randomRingTable(ringTable,RingBufferTable.newRingTableSize);
@@ -164,7 +171,7 @@ public class RingBufferTable {
 //            for(int j=0;j<ringTable.length;j++){
 //                System.out.print(ringTable[j].getIndex()+",");
 //            }
-//            System.out.println("]");
+//            logger.info("]");
 
         }
 

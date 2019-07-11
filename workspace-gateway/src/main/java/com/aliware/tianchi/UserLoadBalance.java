@@ -2,6 +2,8 @@ package com.aliware.tianchi;
 
 import com.aliware.tianchi.domain.ProviderAgent;
 import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.Invoker;
 import org.apache.dubbo.rpc.RpcException;
@@ -21,6 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class UserLoadBalance implements LoadBalance {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserLoadBalance.class);
 
 
     @Override
@@ -33,6 +36,7 @@ public class UserLoadBalance implements LoadBalance {
             Map<String, String> attachments = invocation.getAttachments();
             attachments.put("ringbuffer_index",index+"");
         } catch (Exception e) {
+            logger.info("run in random method" + Counter.randomCount.getAndIncrement()+",error:" + e.getMessage());
             return invokers.get(ThreadLocalRandom.current().nextInt(invokers.size()));
         }
         return invokers.get(group);

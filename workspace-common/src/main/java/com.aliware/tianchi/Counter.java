@@ -11,5 +11,7 @@ public class Counter {
 
     public static AtomicInteger currentIndex = new AtomicInteger(0);
 
+    public static AtomicInteger randomCount = new AtomicInteger(0);
+
 
 }
