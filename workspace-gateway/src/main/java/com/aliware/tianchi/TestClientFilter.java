@@ -28,6 +28,9 @@ public class TestClientFilter implements Filter {
                 RingBufferTable.disableOne(index);
             }
             Result result = invoker.invoke(invocation);
+            if (!StringUtils.isBlank(providerIndex)){
+                RingBufferTable.enableOne(index);
+            }
             return result;
         }catch (Exception e){
             RingBufferTable.enableOne(index);
@@ -39,11 +42,11 @@ public class TestClientFilter implements Filter {
 
     @Override
     public Result onResponse(Result result, Invoker<?> invoker, Invocation invocation) {
-        String providerIndex = invocation.getAttachment("ringbuffer_index");
-        if (!StringUtils.isBlank(providerIndex)){
-            int index = Integer.parseInt(providerIndex);
-            RingBufferTable.enableOne(index);
-        }
+//        String providerIndex = invocation.getAttachment("ringbuffer_index");
+//        if (!StringUtils.isBlank(providerIndex)){
+//            int index = Integer.parseInt(providerIndex);
+//            RingBufferTable.enableOne(index);
+//        }
 
         return result;
     }
