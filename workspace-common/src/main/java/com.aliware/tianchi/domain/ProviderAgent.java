@@ -10,18 +10,14 @@ public class ProviderAgent{
     private boolean isValid;
     private String name;
     private int index;
-
-
-    private ProviderAgent() {
-        this.group = Contants.DEFAULT_PROVIDER_AGENT_GROUP;
-        this.isValid = false;
-    }
+    private long timestamp;
 
     public ProviderAgent(int group, boolean isValid, String name, int index) {
         this.group = group;
         this.isValid = isValid;
         this.name = name;
         this.index = index;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public int getGroup() {
@@ -62,5 +58,13 @@ public class ProviderAgent{
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

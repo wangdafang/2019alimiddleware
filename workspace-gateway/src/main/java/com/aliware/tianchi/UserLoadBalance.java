@@ -37,9 +37,13 @@ public class UserLoadBalance implements LoadBalance {
             attachments.put("ringbuffer_index",index+"");
         } catch (Exception e) {
 //            logger.info("run in random method" + Counter.randomCount.getAndIncrement()+",error:" + e.getMessage());
-//            Counter.randomCount.getAndIncrement();
+            if (Counter.randomCount.get()>10000){
+                throw e;
+            }
+            Counter.randomCount.getAndIncrement();
             return invokers.get(ThreadLocalRandom.current().nextInt(invokers.size()));
         }
+//        Counter.runInRingBuffer.getAndIncrement();
         return invokers.get(group);
     }
 

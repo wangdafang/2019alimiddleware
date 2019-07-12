@@ -5,11 +5,9 @@ package com.aliware.tianchi;
 import com.aliware.tianchi.domain.ProviderAgent;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
+import sun.management.resources.agent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RingBufferTable {
 
-    private static final Logger logger = LoggerFactory.getLogger(RingBufferTable.class);
+//    private static final Logger logger = LoggerFactory.getLogger(RingBufferTable.class);
 
     private static Object block = new Object();
 
@@ -34,7 +32,7 @@ public class RingBufferTable {
 
     private static ConcurrentMap<String, Integer> providerGroup = new ConcurrentHashMap();
 
-    public volatile static ProviderAgent[] ringTable = new ProviderAgent[ringTableSize];
+    private volatile static ProviderAgent[] ringTable = new ProviderAgent[ringTableSize];
 
     private static void initRingTable() {
 //        logger.info("current ringbuffer table size:" + ringTable.length + ",newRingTableSize:" + newRingTableSize);
@@ -47,6 +45,11 @@ public class RingBufferTable {
         if (RingBufferTable.ringTable.length >= newRingTableSize) {
             return;
         }
+//        logger.info("current ringbuffer table size:" + ringTable.length
+//                + ",newRingTableSize:" + newRingTableSize
+//                + ",blockSize:" + Counter.blockSize.get()
+//                + ",randomCount:" + Counter.randomCount.getAndIncrement());
+
         Map<String,Object> currData = RuntimeMaxThreadContants.Server.getCurrData();
         int newRingTableSize = (int)currData.get("totalMaxThread");
         Map<String,Integer> changeMap = (Map<String,Integer>)currData.get("lastChangeThreadMap");
@@ -113,6 +116,13 @@ public class RingBufferTable {
         initRingTable();
     }
 
+    public static ProviderAgent getProviderByIndex(int index){
+        if (index <0 || index > RingBufferTable.ringTableSize){
+            return null;
+        }
+        return RingBufferTable.ringTable[index];
+    }
+
     public static ProviderAgent getNextValidProvider() {
         int index = RingBufferTable.currentIndex.getAndIncrement();
         int ringTableSize = RingBufferTable.ringTableSize;
@@ -123,12 +133,39 @@ public class RingBufferTable {
         do {
             if (RingBufferTable.ringTable[i].isValid()) {
                 RingBufferTable.ringTable[i].disable();
+//                RingBufferTable.ringTable[i].setTimestamp(System.currentTimeMillis());
                 return RingBufferTable.ringTable[i];
             }
             i = (++i) % ringTableSize;
         } while (i != index);
 
         return null;
+    }
+
+    public static void mkProviderDisable(int group){
+        for (ProviderAgent agent : RingBufferTable.ringTable) {
+            if (agent.getGroup() == group){
+                agent.disable();
+            }
+        }
+    }
+
+    public static void mkProviderEnable(int group){
+        for (ProviderAgent agent : RingBufferTable.ringTable) {
+            if (agent.getGroup() == group){
+                agent.enable();
+            }
+        }
+    }
+
+    public static void clearTimeout(){
+        int currentTimeStamp = (int)(System.currentTimeMillis()%10000);
+        for (ProviderAgent agent : RingBufferTable.ringTable) {
+            int tmpTimeStamp = (int)(agent.getTimestamp()%10000);
+            if (currentTimeStamp-tmpTimeStamp > 100){
+                agent.enable();
+            }
+        }
     }
 
     public static int getAndSetGroup(String quota){
@@ -138,6 +175,10 @@ public class RingBufferTable {
         int group = RingBufferTable.groupIndex.getAndIncrement();
         RingBufferTable.providerGroup.putIfAbsent(quota,group);
         return group;
+    }
+
+    public static Set<String> getAllGroupKey(){
+        return RingBufferTable.providerGroup.keySet();
     }
 
     public static void disableOne(int index) {
@@ -154,6 +195,10 @@ public class RingBufferTable {
         }
         RingBufferTable.ringTable[index].enable();
 //        Counter.blockSize.getAndDecrement();
+    }
+
+    public static  ProviderAgent[] forTestGetRingTable(){
+        return RingBufferTable.ringTable;
     }
 
     public static void main(String[] args) {

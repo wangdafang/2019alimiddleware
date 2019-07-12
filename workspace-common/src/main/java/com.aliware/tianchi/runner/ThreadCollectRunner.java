@@ -15,10 +15,16 @@ public class ThreadCollectRunner {
 
     private Timer timer = new Timer();
 
+//    private static int runTimes = 0;
+
     public ThreadCollectRunner() {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+//                if (runTimes++>5000){
+//                    this.cancel();
+//                    return;
+//                }
                 collectThreadNums();
             }
         }, 0, 2);

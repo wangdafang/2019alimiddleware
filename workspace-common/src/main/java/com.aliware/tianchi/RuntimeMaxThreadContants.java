@@ -1,5 +1,7 @@
 package com.aliware.tianchi;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.StringUtils;
 
 import java.util.Collections;
@@ -13,6 +15,9 @@ import java.util.concurrent.ConcurrentMap;
  * @author dafang
  */
 public class RuntimeMaxThreadContants {
+
+//    private static final Logger logger = LoggerFactory.getLogger(RuntimeMaxThreadContants.class);
+
 
     private static Object block = new Object();
 
@@ -53,6 +58,7 @@ public class RuntimeMaxThreadContants {
             if (maxThread > lastMaxThread) {
                 int changeValue = maxThread - lastMaxThread;
                 synchronized (block){
+//                    logger.info("reset lastMaxThreadMap : maxThread:" + maxThread + ",lastMaxThread:" + lastMaxThread);
                     RuntimeMaxThreadContants.Server.totalMaxThread = RuntimeMaxThreadContants.Server.totalMaxThread + changeValue;
                     lastMaxThreadMap.put(quota,maxThread);
                     int lastChange = lastChangeThreadMap.get(quota);

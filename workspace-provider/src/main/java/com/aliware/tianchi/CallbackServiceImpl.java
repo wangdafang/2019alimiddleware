@@ -1,6 +1,8 @@
 package com.aliware.tianchi;
 
 import com.aliware.tianchi.runner.ThreadCollectRunner;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.rpc.listener.CallbackListener;
 import org.apache.dubbo.rpc.service.CallbackService;
 
@@ -22,6 +24,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CallbackServiceImpl implements CallbackService {
 
+//    private static final Logger logger = LoggerFactory.getLogger(CallbackServiceImpl.class);
+
+
+    private static int runTimes = 0;
+
     public CallbackServiceImpl() {
 
         ThreadCollectRunner threadRunner = new ThreadCollectRunner();
@@ -29,6 +36,11 @@ public class CallbackServiceImpl implements CallbackService {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if (runTimes>2000){
+                    this.cancel();
+                    return;
+                }
+
                 if (!listeners.isEmpty()) {
                     for (Map.Entry<String, CallbackListener> entry : listeners.entrySet()) {
                         try {
@@ -37,7 +49,8 @@ public class CallbackServiceImpl implements CallbackService {
                             sb.append(System.getProperty("quota"))
                                     .append(":")
                                     .append(RuntimeMaxThreadContants.Client.getMaxThreadNums());
-//                            System.out.println(sb.toString());
+//                            logger.info("send message to server : " + sb.toString());
+                            runTimes++;
                             entry.getValue().receiveServerMsg(sb.toString());
                         } catch (Throwable t1) {
                             //TODO 此处会导致当线程池满之后，不再向服务端推送信息

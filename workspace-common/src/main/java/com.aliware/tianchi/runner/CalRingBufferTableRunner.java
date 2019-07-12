@@ -16,12 +16,18 @@ public class CalRingBufferTableRunner {
 
     private Timer timer = new Timer();
 
+    private static int runTimes = 0;
+
     public CalRingBufferTableRunner() {
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 try {
+                    if (runTimes++>2000){
+                        this.cancel();
+                        return;
+                    }
                     calculateRingBufferTable();
                 } catch (Exception e) {
                     e.printStackTrace();

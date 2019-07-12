@@ -1,5 +1,6 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.domain.ProviderAgent;
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.extension.Activate;
 import org.apache.dubbo.common.utils.StringUtils;
@@ -8,6 +9,8 @@ import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.Invoker;
 import org.apache.dubbo.rpc.Result;
 import org.apache.dubbo.rpc.RpcException;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author daofeng.xjf
@@ -33,6 +36,14 @@ public class TestClientFilter implements Filter {
             }
             return result;
         }catch (Exception e){
+//            ProviderAgent agent = RingBufferTable.getProviderByIndex(index);
+//            if (agent != null) {
+//                if (Counter.exceptionList.get(agent.getGroup())==null){
+//                    Counter.exceptionList.put(agent.getGroup(),new AtomicInteger(1));
+//                } else{
+//                    Counter.exceptionList.get(agent.getGroup()).getAndIncrement();
+//                }
+//            }
             RingBufferTable.enableOne(index);
             throw e;
 //            return null;

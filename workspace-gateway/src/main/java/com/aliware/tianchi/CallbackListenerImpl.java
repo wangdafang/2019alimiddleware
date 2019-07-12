@@ -1,6 +1,10 @@
 package com.aliware.tianchi;
 
 import com.aliware.tianchi.runner.CalRingBufferTableRunner;
+import com.aliware.tianchi.runner.DocterCheckerRunner;
+import com.aliware.tianchi.runner.ShowRingBufferStatusRunner;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.rpc.listener.CallbackListener;
 
@@ -13,8 +17,13 @@ import org.apache.dubbo.rpc.listener.CallbackListener;
  */
 public class CallbackListenerImpl implements CallbackListener {
 
+//    private static final Logger logger = LoggerFactory.getLogger(CallbackListenerImpl.class);
+
+
     public CallbackListenerImpl() {
         CalRingBufferTableRunner calRunner = new CalRingBufferTableRunner();
+//        ShowRingBufferStatusRunner showRunner = new ShowRingBufferStatusRunner();
+//        DocterCheckerRunner docterRunner = new DocterCheckerRunner();
     }
 
     @Override
@@ -24,6 +33,8 @@ public class CallbackListenerImpl implements CallbackListener {
         }
         String[] params = msg.split(":");
         String providerKey = params[0];
+
+//        logger.info("got message from server : " + msg);
 
         RingBufferTable.getAndSetGroup(providerKey);
         RuntimeMaxThreadContants.Server.setMaxThreadNums(providerKey, Integer.parseInt(params[1]));
