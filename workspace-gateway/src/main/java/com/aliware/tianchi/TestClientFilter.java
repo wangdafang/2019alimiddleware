@@ -36,14 +36,14 @@ public class TestClientFilter implements Filter {
             }
             return result;
         }catch (Exception e){
-//            ProviderAgent agent = RingBufferTable.getProviderByIndex(index);
-//            if (agent != null) {
-//                if (Counter.exceptionList.get(agent.getGroup())==null){
-//                    Counter.exceptionList.put(agent.getGroup(),new AtomicInteger(1));
-//                } else{
-//                    Counter.exceptionList.get(agent.getGroup()).getAndIncrement();
-//                }
-//            }
+            ProviderAgent agent = RingBufferTable.getProviderByIndex(index);
+            if (agent != null) {
+                if (Counter.exceptionList.get(agent.getGroup())==null){
+                    Counter.exceptionList.put(agent.getGroup(),new AtomicInteger(1));
+                } else{
+                    Counter.exceptionList.get(agent.getGroup()).getAndIncrement();
+                }
+            }
             RingBufferTable.enableOne(index);
             throw e;
 //            return null;

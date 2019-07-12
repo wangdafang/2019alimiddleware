@@ -25,7 +25,7 @@ public class DocterCheckerRunner {
             public void run() {
                 healthCheck();
             }
-        }, 5000, 2);
+        }, 10000, 2);
     }
 
     public void healthCheck() {
@@ -40,6 +40,8 @@ public class DocterCheckerRunner {
                     lastDisabled.add(entry.getKey());
                 } else if (lastDisabled.contains(entry.getKey())){
                     RingBufferTable.mkProviderEnable(entry.getKey());
+                    lastDisabled.remove(entry.getKey());
+                    Counter.exceptionList.put(entry.getKey(),new AtomicInteger(0));
                 }
             }
         }

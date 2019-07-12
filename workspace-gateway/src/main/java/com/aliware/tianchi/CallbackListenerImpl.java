@@ -22,8 +22,8 @@ public class CallbackListenerImpl implements CallbackListener {
 
     public CallbackListenerImpl() {
         CalRingBufferTableRunner calRunner = new CalRingBufferTableRunner();
-//        ShowRingBufferStatusRunner showRunner = new ShowRingBufferStatusRunner();
-//        DocterCheckerRunner docterRunner = new DocterCheckerRunner();
+        ShowRingBufferStatusRunner showRunner = new ShowRingBufferStatusRunner();
+        DocterCheckerRunner docterRunner = new DocterCheckerRunner();
     }
 
     @Override
