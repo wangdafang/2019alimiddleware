@@ -24,10 +24,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CallbackServiceImpl implements CallbackService {
 
-//    private static final Logger logger = LoggerFactory.getLogger(CallbackServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CallbackServiceImpl.class);
 
 
     private static int runTimes = 0;
+
+    private static final int stopTimes = 2000;
 
     public CallbackServiceImpl() {
 
@@ -36,7 +38,7 @@ public class CallbackServiceImpl implements CallbackService {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (runTimes>2000){
+                if (runTimes>stopTimes){
                     this.cancel();
                     return;
                 }
@@ -50,8 +52,13 @@ public class CallbackServiceImpl implements CallbackService {
                                     .append(":")
                                     .append(RuntimeMaxThreadContants.Client.getMaxThreadNums());
 //                            logger.info("send message to server : " + sb.toString());
+                            if (runTimes>=stopTimes){
+//                                logger.info("send stop command to server to reset ring table");
+                                entry.getValue().receiveServerMsg("stop");
+                            } else {
+                                entry.getValue().receiveServerMsg(sb.toString());
+                            }
                             runTimes++;
-                            entry.getValue().receiveServerMsg(sb.toString());
                         } catch (Throwable t1) {
                             //TODO 此处会导致当线程池满之后，不再向服务端推送信息
 //                            listeners.remove(entry.getKey());

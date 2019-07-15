@@ -19,6 +19,8 @@ public class Counter {
 
     public static AtomicInteger runInRingBuffer = new AtomicInteger(0);
 
+    public static AtomicInteger enableCount = new AtomicInteger(0);
+
     public static ConcurrentMap<Integer,AtomicInteger> exceptionList = new ConcurrentHashMap<>();
 
 

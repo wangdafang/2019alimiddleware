@@ -34,10 +34,10 @@ public class UserLoadBalance implements LoadBalance {
             group = agent.getGroup();
             int index = agent.getIndex();
             Map<String, String> attachments = invocation.getAttachments();
-            attachments.put("ringbuffer_index",index+"");
+            attachments.put("ringbuffer_index",String.valueOf(index));
         } catch (Exception e) {
 //            logger.info("run in random method" + Counter.randomCount.getAndIncrement()+",error:" + e.getMessage());
-            if (Counter.randomCount.get()>10000){
+            if (Counter.randomCount.get()>5000){
                 throw e;
             }
             Counter.randomCount.getAndIncrement();

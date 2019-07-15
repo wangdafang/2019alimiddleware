@@ -35,7 +35,14 @@ public class ShowRingBufferStatusRunner {
                 count++;
             }
         }
-        logger.info("current ringbuffer valid size : " + count + ",total run in ringbuffer size :" + Counter.runInRingBuffer.get() + ",random run size : " + Counter.randomCount.get());
+
+        logger.info(
+                         "total ringbuffer size:" + RingBufferTable.forTestGetRingTable().length
+                        + ",enable count:" + Counter.enableCount.get()
+                        + ",current ringbuffer valid size : " + count
+                        + ",total run in ringbuffer size :" + Counter.runInRingBuffer.get()
+                        + ",random run size : " + Counter.randomCount.get()
+        );
 
 
     }

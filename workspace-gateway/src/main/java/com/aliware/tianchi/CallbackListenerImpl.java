@@ -17,18 +17,23 @@ import org.apache.dubbo.rpc.listener.CallbackListener;
  */
 public class CallbackListenerImpl implements CallbackListener {
 
-//    private static final Logger logger = LoggerFactory.getLogger(CallbackListenerImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CallbackListenerImpl.class);
 
 
     public CallbackListenerImpl() {
         CalRingBufferTableRunner calRunner = new CalRingBufferTableRunner();
 //        ShowRingBufferStatusRunner showRunner = new ShowRingBufferStatusRunner();
-        DocterCheckerRunner docterRunner = new DocterCheckerRunner();
+//        DocterCheckerRunner docterRunner = new DocterCheckerRunner();
     }
 
     @Override
     public void receiveServerMsg(String msg) {
         if (StringUtils.isBlank(msg) || msg.indexOf(" ") >= 0) {
+            return;
+        }
+        if (msg.startsWith("stop")){
+//            logger.info("stop get provider message,reset ring table");
+            RingBufferTable.resetRingTable();
             return;
         }
         String[] params = msg.split(":");

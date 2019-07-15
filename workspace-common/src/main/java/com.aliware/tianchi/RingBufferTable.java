@@ -142,6 +142,12 @@ public class RingBufferTable {
         return null;
     }
 
+    public static void resetRingTable(){
+        for (ProviderAgent agent : RingBufferTable.ringTable) {
+            agent.enable();
+        }
+    }
+
     public static void mkProviderDisable(int group){
         for (ProviderAgent agent : RingBufferTable.ringTable) {
             if (agent.getGroup() == group){
